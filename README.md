@@ -3,9 +3,6 @@
 Ein leichter, selbst-gehosteter Web-Tracker für den Energieverbrauch von Elektrofahrzeugen.  
 Entwickelt mit **Python (Flask)** und **Pandas**, optimiert für den Betrieb auf Linux-Containern (LXC/Docker) oder Raspberry Pi.
 
-![Dashboard Screenshot](docs/screenshot_dashboard.png)
-*(Platzhalter für deinen Screenshot)*
-
 ## 💡 Hintergrund & Motivation
 
 **Warum dieses Tool?** Dieses Projekt entstand aus dem Bedarf heraus, da **keine smarte Wallbox** vorhanden ist. Wer sein E-Auto an einer einfachen Wallbox oder Steckdose mit vorgeschaltetem, analogen oder digitalen Zwischenzähler lädt, hat oft keinen digitalen Überblick über die Kosten.
