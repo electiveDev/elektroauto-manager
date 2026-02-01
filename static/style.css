@@ -94,4 +94,28 @@ th { color: var(--text-secondary); }
 /* Alerts */
 .alert { padding: 10px; border-radius: 4px; margin-bottom: 15px; }
 .alert.error { background: rgba(255, 77, 77, 0.2); border: 1px solid var(--danger-color); }
+
 .alert.success { background: rgba(0, 184, 148, 0.2); border: 1px solid var(--success-color); }
+
+.btn-secondary {
+    background: #444;
+    color: white;
+    padding: 8px 15px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+.btn-secondary:hover { background: #555; }
+
+.btn-small {
+    background: var(--accent-color);
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.settings-section {
+    border-left: 4px solid var(--accent-color);
+}
