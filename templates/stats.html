@@ -9,31 +9,35 @@
 </head>
 <body>
     <div class="container">
-        <header style="display: flex; align-items: center; gap: 20px; margin-bottom: 30px; padding-bottom: 10px; border-bottom: 1px solid #333;">
-            <a href="{{ url_for('index') }}" class="btn-secondary" style="margin: 0;">← Zurück</a>
-            <h1 style="margin: 0;">📊 Auswertung & Statistik</h1>
+        <header style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 15px;">
+            <a href="{{ url_for('index') }}" class="btn-secondary" style="margin: 0; display:flex; align-items:center; height: 32px;">← Zurück</a>
+            <h1 style="margin: 0; line-height: 1;">Statistik</h1>
         </header>
 
         <div class="form-grid" style="margin-bottom: 20px;">
             <div class="card" style="text-align:center;">
-                <h3>Gesamtverbrauch</h3>
-                <p style="font-size: 2em; color: var(--accent-color); margin: 10px 0;">{{ "%.1f"|format(total_kwh) }} kWh</p>
+                <h3 style="margin-top: 0; color: var(--text-secondary);">Gesamtverbrauch</h3>
+                <p style="font-size: 2em; font-weight:bold; color: var(--accent-color); margin: 10px 0;">
+                    {{ "%.1f"|format(total_kwh) }} <span style="font-size:0.5em; color:var(--text-secondary);">kWh</span>
+                </p>
             </div>
             <div class="card" style="text-align:center;">
-                <h3>Gesamtkosten</h3>
-                <p style="font-size: 2em; color: var(--success-color); margin: 10px 0;">{{ "%.2f"|format(total_cost) }} €</p>
+                <h3 style="margin-top: 0; color: var(--text-secondary);">Gesamtkosten</h3>
+                <p style="font-size: 2em; font-weight:bold; color: var(--success-color); margin: 10px 0;">
+                    {{ "%.2f"|format(total_cost) }} <span style="font-size:0.5em; color:var(--text-secondary);">€</span>
+                </p>
             </div>
         </div>
 
         <section class="card">
-            <h2>Monatsvergleich (Jahreslinien)</h2>
-            <div style="height: 400px;">
+            <h2 style="margin-top:0;">Monatsvergleich (Jahreslinien)</h2>
+            <div style="height: 400px; width: 100%;">
                 <canvas id="comparisonChart"></canvas>
             </div>
         </section>
 
         <section class="card">
-            <h2>Jahresübersicht</h2>
+            <h2 style="margin-top:0;">Jahresübersicht</h2>
             <div class="table-responsive">
                 <table>
                     <thead>
@@ -61,13 +65,16 @@
         const chartData = {{ chart_data | tojson }};
         const ctx = document.getElementById('comparisonChart').getContext('2d');
         
-        // Chart Config (Dunkles Design angepasst)
         new Chart(ctx, {
             type: 'line',
             data: chartData,
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
                 scales: {
                     y: {
                         beginAtZero: true,
@@ -80,7 +87,14 @@
                     }
                 },
                 plugins: {
-                    legend: { labels: { color: '#fff' } }
+                    legend: { labels: { color: '#fff' } },
+                    tooltip: {
+                        backgroundColor: 'rgba(30, 30, 30, 0.9)',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        borderColor: '#555',
+                        borderWidth: 1
+                    }
                 }
             }
         });
