@@ -22,7 +22,7 @@ body {
     margin: 0 auto;
 }
 
-h1, h2 { margin-top: 0; }
+h1, h2, h3 { margin-top: 0; }
 
 .card {
     background: var(--card-bg);
@@ -32,7 +32,7 @@ h1, h2 { margin-top: 0; }
     box-shadow: 0 4px 6px rgba(0,0,0,0.3);
 }
 
-/* Form Styles */
+/* --- Form Styles --- */
 .form-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -59,6 +59,12 @@ input {
     border-radius: 4px;
 }
 
+input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+/* --- Buttons --- */
 button.btn-primary {
     background: var(--accent-color);
     color: #000;
@@ -68,11 +74,84 @@ button.btn-primary {
     cursor: pointer;
     font-weight: bold;
     width: 100%;
+    font-size: 1em;
 }
-
 button.btn-primary:hover { opacity: 0.9; }
 
-/* Table Styles */
+.btn-secondary {
+    background: #333;
+    color: var(--text-primary);
+    padding: 8px 15px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.9em;
+    border: 1px solid transparent;
+    transition: background 0.2s;
+}
+.btn-secondary:hover {
+    background: #444;
+    border-color: #555;
+}
+
+.btn-small {
+    background: var(--accent-color);
+    color: #000;
+    border: none;
+    padding: 0 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.btn-small:hover { opacity: 0.9; }
+
+.btn-delete {
+    color: var(--danger-color);
+    text-decoration: none;
+    font-size: 1.2em;
+    font-weight: bold;
+    padding: 0 5px;
+}
+.btn-delete:hover { color: #ff6666; }
+
+/* --- Settings Section (Ausklappbar) --- */
+.settings-section {
+    border-left: 4px solid var(--accent-color);
+}
+
+details > summary {
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--text-primary);
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    outline: none;
+}
+
+/* Kleines Dreieck animieren */
+details > summary::before {
+    content: '▶';
+    font-size: 0.7em;
+    color: var(--accent-color);
+    transition: transform 0.2s ease;
+    display: inline-block;
+}
+
+details[open] > summary::before {
+    transform: rotate(90deg);
+}
+
+/* Webkit Fix für Standard-Dreieck */
+details > summary::-webkit-details-marker {
+    display: none;
+}
+
+/* --- Table Styles --- */
 .table-responsive { overflow-x: auto; }
 
 table {
@@ -86,58 +165,12 @@ th, td {
     border-bottom: 1px solid var(--border-color);
 }
 
-th { color: var(--text-secondary); }
+th { color: var(--text-secondary); font-weight: normal; }
 
 .text-danger { color: var(--danger-color); font-weight: bold; }
-.btn-delete { color: var(--danger-color); text-decoration: none; font-size: 0.9em; }
 
-/* Alerts */
+/* --- Alerts --- */
 .alert { padding: 10px; border-radius: 4px; margin-bottom: 15px; }
 .alert.error { background: rgba(255, 77, 77, 0.2); border: 1px solid var(--danger-color); }
-
 .alert.success { background: rgba(0, 184, 148, 0.2); border: 1px solid var(--success-color); }
-
-.btn-secondary {
-    background: #444;
-    color: white;
-    padding: 8px 15px;
-    text-decoration: none;
-    border-radius: 4px;
-    font-size: 0.9em;
-}
-.btn-secondary:hover { background: #555; }
-
-.btn-small {
-    background: var(--accent-color);
-    border: none;
-    padding: 8px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.settings-section {
-    border-left: 4px solid var(--accent-color);
-}
-
-/* Style für das ausklappbare Menü */
-details > summary {
-    cursor: pointer;
-    font-weight: bold;
-    color: var(--accent-color);
-    list-style: none; /* Standard-Dreieck entfernen (optional) */
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-/* Eigenes Icon für das Menü (optional, sieht schicker aus) */
-details > summary::before {
-    content: '▶';
-    font-size: 0.8em;
-    transition: transform 0.2s;
-}
-
-details[open] > summary::before {
-    transform: rotate(90deg);
-}
+.alert.info { background: rgba(0, 212, 255, 0.2); border: 1px solid var(--accent-color); }
