@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="container">
-        <header style="display:flex; justify-content:space-between; align-items:center;">
+        <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
             <h1>⚡ EV Manager</h1>
             <div>
                 <a href="{{ url_for('stats') }}" class="btn-secondary">📊 Statistik</a>
@@ -24,10 +24,24 @@
         {% endwith %}
 
         <section class="card settings-section">
-            <form method="POST" action="/settings" style="display:flex; gap:10px; align-items:center;">
-                <label for="default_vehicle" style="white-space:nowrap;">Standard Fahrzeug:</label>
-                <input type="text" name="default_vehicle" value="{{ default_vehicle }}" placeholder="Standard speichern...">
-                <button type="submit" class="btn-small">💾 Setzen</button>
+            <h3 style="margin-top:0; font-size:1.1em; color:var(--text-secondary); border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 15px;">Standardwerte konfigurieren</h3>
+            
+            <form method="POST" action="/settings" class="form-grid" style="align-items: end;">
+                <div class="form-group">
+                    <label for="default_vehicle">Fahrzeug Name</label>
+                    <input type="text" id="default_vehicle" name="default_vehicle" 
+                           value="{{ default_vehicle }}" placeholder="z.B. Tesla Model Y">
+                </div>
+
+                <div class="form-group">
+                    <label for="default_price">Strompreis (€/kWh)</label>
+                    <input type="number" step="0.01" id="default_price" name="default_price" 
+                           value="{{ default_price }}" placeholder="0.30">
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn-small" style="height: 42px; width: 100%;">💾 Werte sichern</button>
+                </div>
             </form>
         </section>
 
@@ -39,35 +53,38 @@
                         <label>Fahrzeug</label>
                         <input type="text" name="vehicle_id" value="{{ default_vehicle }}" required>
                     </div>
+
                     <div class="form-group">
                         <label>Datum</label>
                         <input type="date" name="date" value="{{ today }}" required>
                     </div>
+
                     <div class="form-group">
                         <label>Zählerstand (kWh)</label>
-                        <input type="number" step="0.1" name="meter_reading" required>
+                        <input type="number" step="0.1" name="meter_reading" placeholder="z.B. 12500.5" required>
                     </div>
+
                     <div class="form-group">
                         <label>Preis (€/kWh)</label>
-                        <input type="number" step="0.01" name="price" value="0.30" required>
+                        <input type="number" step="0.01" name="price" value="{{ default_price }}" required>
                     </div>
                 </div>
-                <button type="submit" class="btn-primary">Eintrag speichern</button>
+                <button type="submit" class="btn-primary" style="margin-top: 20px;">Eintrag speichern</button>
             </form>
         </section>
 
         <section class="card">
-            <h2>Historie</h2>
+            <h2>Verlauf</h2>
             <div class="table-responsive">
                 <table>
                     <thead>
                         <tr>
                             <th>Datum</th>
                             <th>Fahrzeug</th>
-                            <th>Stand</th>
+                            <th>Stand (kWh)</th>
                             <th>Verbrauch</th>
                             <th>Kosten</th>
-                            <th></th>
+                            <th>Aktion</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -76,11 +93,28 @@
                             <td>{{ entry.date.strftime('%d.%m.%Y') }}</td>
                             <td>{{ entry.vehicle_id }}</td>
                             <td>{{ entry.meter_reading }}</td>
+                            
                             <td class="{{ 'text-danger' if entry.consumption_kwh < 0 else '' }}">
-                                {{ "%.1f"|format(entry.consumption_kwh) }} kWh
+                                {% if entry.consumption_kwh < 0 %}
+                                    ⚠ {{ "%.1f"|format(entry.consumption_kwh) }} kWh
+                                {% else %}
+                                    +{{ "%.1f"|format(entry.consumption_kwh) }} kWh
+                                {% endif %}
                             </td>
+                            
                             <td>{{ "%.2f"|format(entry.cost_eur) }} €</td>
-                            <td><a href="{{ url_for('delete', entry_id=entry.id) }}" class="btn-delete">×</a></td>
+                            
+                            <td>
+                                <a href="{{ url_for('delete', entry_id=entry.id) }}" 
+                                   class="btn-delete"
+                                   onclick="return confirm('Eintrag wirklich löschen?');">×</a>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6" style="text-align:center; color: #777; padding: 20px;">
+                                Noch keine Einträge vorhanden.
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>
