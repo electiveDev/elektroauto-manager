@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EV Statistik</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="{{ url_for('index') }}" class="btn-secondary">← Zurück</a>
+            <h1>📊 Auswertung & Statistik</h1>
+        </header>
+
+        <div class="form-grid" style="margin-bottom: 20px;">
+            <div class="card" style="text-align:center;">
+                <h3>Gesamtverbrauch</h3>
+                <p style="font-size: 2em; color: var(--accent-color);">{{ "%.1f"|format(total_kwh) }} kWh</p>
+            </div>
+            <div class="card" style="text-align:center;">
+                <h3>Gesamtkosten</h3>
+                <p style="font-size: 2em; color: var(--success-color);">{{ "%.2f"|format(total_cost) }} €</p>
+            </div>
+        </div>
+
+        <section class="card">
+            <h2>Monatsvergleich (Jahreslinien)</h2>
+            <div style="height: 400px;">
+                <canvas id="comparisonChart"></canvas>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Jahresübersicht</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Jahr</th>
+                        <th>Verbrauch (kWh)</th>
+                        <th>Kosten (€)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in yearly_data %}
+                    <tr>
+                        <td><strong>{{ row.year }}</strong></td>
+                        <td>{{ "%.1f"|format(row.consumption_kwh) }}</td>
+                        <td>{{ "%.2f"|format(row.cost_eur) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <script>
+        // Daten von Flask (Jinja2) an JS übergeben
+        const chartData = {{ chart_data | tojson }};
+
+        const ctx = document.getElementById('comparisonChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: chartData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#333' }
+                    },
+                    x: {
+                        grid: { color: '#333' }
+                    }
+                },
+                plugins: {
+                    legend: { labels: { color: '#fff' } }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
